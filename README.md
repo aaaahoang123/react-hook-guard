@@ -50,7 +50,7 @@ const RouterOutlet = require('react-hook-guard').RouterOutlet;
 
 ## Basic usage
 
-Here is a very basic example of how to use React Router Guards.
+Here is a very basic example of how to use React Hook Guard.
 
 ```tsx
 // App.tsx
