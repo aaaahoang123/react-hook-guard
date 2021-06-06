@@ -49,7 +49,7 @@ export interface Route<D = any> {
     exact?: boolean;
 }
 
-export declare type Routes = Route[];
+export declare type Routes<D = any> = Route<D>[];
 
 export interface WithRouteProps {
     route: Route

@@ -1,6 +1,6 @@
 {
-  "name": "react-auth-router",
-  "version": "0.0.5",
+  "name": "react-hook-guard",
+  "version": "0.0.2",
   "description": "Combine react-router-dom with configs, guard functions like angular router styles",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",

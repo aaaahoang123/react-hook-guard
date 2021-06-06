@@ -3,8 +3,8 @@ export * from './define';
 
 export {default as RouterOutlet} from './components/RouterOutlet';
 
-const authRouter = {
+const hookGuard = {
     config
 };
 
-export default authRouter;
+export default hookGuard;
