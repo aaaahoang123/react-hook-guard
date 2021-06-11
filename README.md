@@ -15,6 +15,7 @@ React Hook Guards provides angular-like to implement the [React Router](https://
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
+- [Customize FallBack components](#customize-fallback-components)
 
 ## Requirements
 
@@ -144,4 +145,50 @@ const appRoutes: Routes = [
 function App() {
   return <RouterOutlet routes={appRoutes}/>;
 }
+```
+
+## Customize fallback components
+
+By default, react-hook-guard will not redirect you to any other route, if the guard functions return false, a default empty component will be returned
+
+```tsx
+function RouteFallback() {
+    return (
+        <div />
+    );
+}
+
+export default RouteFallback;
+```
+
+To customize this, please create your own custom component, and then config it in `index.tsx` or `index.js` file.
+
+```tsx
+function SuspenseFallback() {
+    return (
+        <div>
+            Loading...
+        </div>
+    );
+}
+
+function CantActivateFallback() {
+    return (
+        <div>
+            You can not access this page
+        </div>
+    );
+}
+
+// index.tsx
+import reactHookGuard from 'react-hook-guard';
+
+reactHookGuard.config({
+    // Suspense component will be use to Suspense the lazyload components
+    SuspenseFallback,
+    // Can't Activate component will be use when the route can not be access
+    CantActivateFallback
+});
+
+// More codes here
 ```

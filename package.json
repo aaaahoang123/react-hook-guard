@@ -1,6 +1,6 @@
 {
   "name": "react-hook-guard",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Combine react-router-dom with configs, guard functions like angular router styles",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -8,12 +8,14 @@
   "source": "./src/index.ts",
   "author": "Hoang Do",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aaaahoang123/react-hook-guard"
+  },
   "devDependencies": {
-    "@types/lodash": "^4.14.170",
     "@types/react": "^17.0.9",
     "@types/react-dom": "^17.0.6",
     "@types/react-router-dom": "^5.1.7",
-    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
