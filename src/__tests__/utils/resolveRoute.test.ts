@@ -1,0 +1,3 @@
+test('Resolve simple route', () => {
+
+});
