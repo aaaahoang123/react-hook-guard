@@ -7,7 +7,7 @@ function App() {
     <div className="App">
         <RouterOutlet routes={routes} relativeMode={true} />
     </div>
-  );
+  )
 }
 
 export default App;

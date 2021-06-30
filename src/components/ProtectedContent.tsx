@@ -40,9 +40,8 @@ const ProtectedContent = memo(({route, parentRoute, relativeMode,...props}: Prot
         }
     }
 
-    console.log({route, parentRoute});
-    if (typeof route.redirectExactTo === 'string' || typeof route.redirectTo === 'string') {
-        return <MatchRouteRedirect to={route.redirectExactTo ?? route.redirectTo as any} />;
+    if (typeof route.absoluteRedirectTo === 'string' || typeof route.redirectTo === 'string') {
+        return <MatchRouteRedirect to={route.absoluteRedirectTo ?? route.redirectTo as any} />;
     }
 
     const result = [];

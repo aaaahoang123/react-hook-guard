@@ -1,13 +1,17 @@
 import {useAuth} from './AuthProvider';
 import {useHistory} from 'react-router-dom';
+import {useEffect} from 'react';
 
 export function useGuestGuard() {
     const auth = useAuth();
     const history = useHistory();
-    if (auth.authenticated) {
-        console.log('useGuestGuard', auth);
-        setTimeout(() => history.push('/app/abc'));
-    }
+
+    useEffect(() => {
+        if (auth.authenticated) {
+            console.log('useGuestGuard', auth);
+            history.push('/app/abc');
+        }
+    }, [auth]);
     return !auth.authenticated;
 }
 

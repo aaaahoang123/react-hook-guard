@@ -16,13 +16,13 @@ const resolveRoute = (route: RouteWithCommand, parentRoute?: RouteWithCommand, r
             route.path
         ].filter(command => !!command);
         resolvedRoute.commands = commands;
-        resolvedRoute.path = '/' + commands.join('/');
+        resolvedRoute.absolutePath = '/' + commands.join('/');
         if (typeof route.redirectTo === 'string') {
             const redirectToCommands = [
                 ...parentRoute?.commands ?? [],
                 route.redirectTo,
             ].filter(command => !!command);
-            resolvedRoute.redirectTo = '/' + redirectToCommands.join('/');
+            resolvedRoute.absoluteRedirectTo = '/' + redirectToCommands.join('/');
         }
     }
 
@@ -41,14 +41,19 @@ const RouterOutlet = memo(({routes, parentRoute, relativeMode}: RouterOutletProp
     return (
         <Switch>
             {
-                resolvedRoutes?.map((route: Route) => (
-                    <RouteComponent path={route.path}
-                           exact={route.exact}
-                           key={route.path}
-                           render={props => <ProtectedContent route={route}
-                                                              parentRoute={parentRoute}
-                                                              relativeMode={relativeMode}
-                                                               />}/>
+                resolvedRoutes?.map((route: RouteWithCommand) => (
+                    <RouteComponent
+                        path={route.absolutePath}
+                        exact={route.exact}
+                        key={route.absolutePath}
+                        render={props =>
+                            <ProtectedContent
+                                route={route}
+                                parentRoute={parentRoute}
+                                relativeMode={relativeMode}
+                                {...props} />
+                        }
+                    />
                 ))
             }
         </Switch>

@@ -8,6 +8,8 @@
 
 > Easily to make a multiple layout react app
 
+> Relative mode supported for config route
+
 React Hook Guards provides angular-like to implement the [React Router](https://reacttraining.com/react-router/),
 allowing you to perform complex logics in various hooks to guards your router.
 
@@ -57,26 +59,27 @@ Here is a very basic example of how to use React Hook Guard.
 ```tsx
 // App.tsx
 import {Route, Routes, WithRouteProps, RouterOutlet} from 'react-hook-guard';
-import {lazy, useContext, useState} from 'react';
+import {lazy, useContext, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useHistory} from 'react-router';
 
-function WithoutNavbarLayout({route}: WithRouteProps) {
+function WithoutNavbarLayout({...props}: any) {
     return (
         <div className={'container'}>
-            <RouterOutlet routes={route?.children}/>
+            {/* Pass all other props here to extends the relative path from parent */}
+            <RouterOutlet {...props}/>
         </div>
     );
 }
 
-function WithNavbarLayout({route}: WithRouteProps) {
+function WithNavbarLayout({...props}: any) {
     return (
         <div className={'container'}>
             <nav className={'nav-bar'}>
                 <Link to={'/dashboard'}>Dashboard</Link>
                 <Link to={'/info'}>Info</Link>
             </nav>
-            <RouterOutlet routes={route?.children}/>
+            <RouterOutlet {...props} />
         </div>
     );
 }
@@ -88,44 +91,48 @@ function useAuthenticationGuard() {
 
     // const user = useSelector(state => state.user);
     // const user = useContext(userContext);
-    const user = useState(fakeUser);
+    const [user] = useState(fakeUser);
     return !!user;
 }
 
 function useGuestGuard() {
     // Share the same resource data with authentication guard
-    const user = useState(fakeUser);
+    const [user] = useState(fakeUser);
     const history = useHistory();
 
     // use history to intercept when user logged in.
-    if (user) {
-        history.push('/dashboard');
-    }
+    // Should wrap the code in useEffect hooks to avoid some render problems.
+    useEffect(() => {
+        if (user) {
+            history.push('/dashboard');
+        }
+    }, [user]);
+    
     return !user;
 }
 
 function useAuthorizationGuard(route: Route) {
-    const user = useState(fakeUser);
+    const [user] = useState(fakeUser);
     // Use role from route config to dynamic authorization
     return !!user && route.data?.role && user.role === route.data?.role;
 }
 
 const appRoutes: Routes = [
     {
-        path: '/auth',
+        path: 'auth', // Please, do not write root route such as '/auth' to use relativeMode
         component: WithoutNavbarLayout,
         canActivate: [useGuestGuard],
         children: [
             {
-                path: '/auth/login',
+                path: 'login',
                 component: lazy(() => import('./features/auth/login')),
                 data: {title: 'Login'}
             },
-            {path: '/auth', redirectTo: '/auth/login'}
+            {path: '', redirectTo: 'login'} // redirect relative with the parent path, you can use `absoluteRedirectTo` property instead for absolute path
         ]
     },
     {
-        path: '/',
+        path: '',
         component: WithNavbarLayout,
         canActivate: [useAuthenticationGuard],
         // Auto extend the guard to `canActivate` of every children
@@ -133,18 +140,19 @@ const appRoutes: Routes = [
         canActivateChild: [useAuthorizationGuard],
         children: [
             {
-                path: '/dasboard',
+                path: 'dashboard',
                 component: lazy(() => import('./features/dashboard')),
                 data: {role: 'admin'}
             },
-            {path: '/info', component: lazy(() => import('./features/info'))},
-            {path: '/', redirectTo: '/dashboard'}
+            {path: 'info', component: lazy(() => import('./features/info'))},
+            {path: '', redirectTo: 'dashboard'}
         ]
     },
 ];
 
 function App() {
-    return <RouterOutlet routes={appRoutes}/>;
+    // Ignore relativeMode property if you want to use absolute route paths
+    return <RouterOutlet routes={appRoutes} relativeMode={true}/>;
 }
 ```
 
