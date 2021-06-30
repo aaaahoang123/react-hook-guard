@@ -23,6 +23,10 @@ export interface Route<D = any> {
      */
     redirectTo?: string;
     /**
+     * Redirect to the absolute path if match route
+     */
+    absoluteRedirectTo?: string;
+    /**
      * The guard functions for route
      */
     canActivate?: GuardFn[];
@@ -50,6 +54,11 @@ export interface Route<D = any> {
 }
 
 export declare type Routes<D = any> = Route<D>[];
+
+export declare type RouteWithCommand<D = any> = Route<D> & {
+    commands?: string[];
+    absolutePath?: string;
+};
 
 export interface WithRouteProps {
     route: Route
