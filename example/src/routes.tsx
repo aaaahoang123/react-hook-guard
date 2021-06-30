@@ -45,6 +45,10 @@ const routes: Routes = [
             }
         ]
     },
+    {
+        path: '',
+        redirectTo: 'v1'
+    }
 ];
 
 export default routes;

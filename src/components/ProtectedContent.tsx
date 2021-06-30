@@ -17,7 +17,6 @@ interface MatchRouteRedirectProps {
 
 const MatchRouteRedirect = memo(({to}: MatchRouteRedirectProps) => {
     const match = useRouteMatch();
-    console.log(match);
 
     const redirectToRoute = useMemo(() => {
         return generatePath<string>(to, match.params);
@@ -27,34 +26,10 @@ const MatchRouteRedirect = memo(({to}: MatchRouteRedirectProps) => {
 });
 
 const ProtectedContent = memo(({route, parentRoute, relativeMode,...props}: ProtectedContentProps) => {
-    console.log({route});
-    const resolvedRoute = useMemo(() => {
-        const resolvedRoute = {...route};
-        if (relativeMode) {
-            resolvedRoute.path = parentRoute?.path ?? '/' + (route.path ? `/${route.path}` : route.path);
-            if (typeof route.redirectTo === 'string') {
-                resolvedRoute.redirectTo = parentRoute?.path ?? '/' + (route.redirectTo ? `/${route.redirectTo}` : route.redirectTo);
-            }
-        }
-
-        if (parentRoute) {
-            resolvedRoute.canActivate = ([] as any[]).concat(parentRoute.canActivateChild ?? [], route.canActivate ?? []);
-        }
-
-        return resolvedRoute;
-    }, [route, relativeMode, parentRoute]);
-
-    // const redirectToRoute = useMemo(() => {
-    //     if (!resolvedRoute.redirectTo) {
-    //         return resolvedRoute.redirectTo;
-    //     }
-    //     return generatePath<string>(resolvedRoute.redirectTo, match.params);
-    // }, [match, resolvedRoute]);
-
-    if (resolvedRoute.canActivate) {
+    if (route.canActivate) {
         let active = true;
-        for (const activate of resolvedRoute.canActivate) {
-            if (!activate(resolvedRoute)) {
+        for (const activate of route.canActivate) {
+            if (!activate(route)) {
                 active = false;
             }
         }
@@ -65,9 +40,9 @@ const ProtectedContent = memo(({route, parentRoute, relativeMode,...props}: Prot
         }
     }
 
-    console.log({resolvedRoute, route, parentRoute});
-    if (typeof route.redirectTo === 'string') {
-        return <MatchRouteRedirect to={route.redirectTo} />;
+    console.log({route, parentRoute});
+    if (typeof route.redirectExactTo === 'string' || typeof route.redirectTo === 'string') {
+        return <MatchRouteRedirect to={route.redirectExactTo ?? route.redirectTo as any} />;
     }
 
     const result = [];
@@ -77,16 +52,16 @@ const ProtectedContent = memo(({route, parentRoute, relativeMode,...props}: Prot
             <Suspense fallback={<SuspenseFallback />} key={0}>
                 <route.component {...props }
                     // @ts-ignore
-                                 parentRoute={resolvedRoute}
-                                 routes={resolvedRoute.children}
+                                 parentRoute={route}
+                                 routes={route.children}
                                  relativeMode={relativeMode} />
             </Suspense>
         );
-    } else if (resolvedRoute.children?.length) {
+    } else if (route.children?.length) {
         result.push(
             <RouterOutlet key={1}
-                          routes={resolvedRoute.children}
-                          parentRoute={resolvedRoute}
+                          routes={route.children}
+                          parentRoute={route}
                           relativeMode={relativeMode}
             />
         );

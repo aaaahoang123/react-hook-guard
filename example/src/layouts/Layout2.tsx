@@ -6,10 +6,10 @@ function Layout2({...props}: any) {
         <>
             This is Layout 2
             <div>
-                <Link to={'/component2'}>
+                <Link to={'/tt/component2'}>
                     Component 2
                 </Link>
-                <Link to={'/component3'}>
+                <Link to={'/vovi/component3'}>
                     Component 3
                 </Link>
             </div>
