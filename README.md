@@ -106,7 +106,7 @@ function useGuestGuard() {
         if (user) {
             history.push('/dashboard');
         }
-    }, [user]);
+    }, [user, history]);
     
     return !user;
 }

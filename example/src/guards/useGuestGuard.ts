@@ -11,7 +11,7 @@ export function useGuestGuard() {
             console.log('useGuestGuard', auth);
             history.push('/app/abc');
         }
-    }, [auth]);
+    }, [auth, history]);
     return !auth.authenticated;
 }
 

@@ -69,6 +69,10 @@ export interface WithRoutesProps {
     className?: string;
 }
 
+export interface WithParentRouteProps {
+    parentRoute?: RouteWithCommand;
+}
+
 export interface AuthRouterConfigOptions {
     SuspenseFallback?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
     CantActivateFallback?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;

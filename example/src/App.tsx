@@ -1,5 +1,5 @@
 import './App.css';
-import {RouterOutlet} from 'react-auth-router';
+import {RouterOutlet} from 'react-hook-guard';
 import routes from './routes';
 
 function App() {

@@ -1,4 +1,4 @@
-import {Routes} from 'react-auth-router';
+import {Routes} from 'react-hook-guard';
 import WithoutNavbarLayout from './layouts/WithoutNavbarLayout';
 import {useGuestGuard} from './guards/useGuestGuard';
 import {lazy} from 'react';

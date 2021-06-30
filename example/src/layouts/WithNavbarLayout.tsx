@@ -1,4 +1,4 @@
-import {RouterOutlet} from 'react-auth-router';
+import {RouterOutlet} from 'react-hook-guard';
 import { Link } from 'react-router-dom';
 
 function WithNavbarLayout({...props}: any) {

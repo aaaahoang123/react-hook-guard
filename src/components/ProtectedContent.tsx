@@ -1,4 +1,4 @@
-import {Route, WithRouteProps} from '../define';
+import {WithRouteProps} from '../define';
 import {fallbackComponents} from '../config';
 import {Redirect, useRouteMatch, generatePath} from 'react-router-dom';
 import {memo, Suspense, useMemo} from 'react';
@@ -6,8 +6,7 @@ import RouterOutlet from './RouterOutlet';
 
 const {CantActivateFallback, SuspenseFallback} = fallbackComponents;
 
-interface ProtectedContentProps extends WithRouteProps {
-    parentRoute?: Route;
+export interface ProtectedContentProps extends WithRouteProps {
     relativeMode?: boolean;
 }
 
@@ -17,15 +16,12 @@ interface MatchRouteRedirectProps {
 
 const MatchRouteRedirect = memo(({to}: MatchRouteRedirectProps) => {
     const match = useRouteMatch();
-
-    const redirectToRoute = useMemo(() => {
-        return generatePath<string>(to, match.params);
-    }, [match, to]);
+    const redirectToRoute = useMemo(() => generatePath<string>(to, match.params), [match, to]);
 
     return <Redirect to={redirectToRoute} />;
 });
 
-const ProtectedContent = memo(({route, parentRoute, relativeMode,...props}: ProtectedContentProps) => {
+const ProtectedContent = memo(({route, relativeMode,...props}: ProtectedContentProps) => {
     if (route.canActivate) {
         let active = true;
         for (const activate of route.canActivate) {

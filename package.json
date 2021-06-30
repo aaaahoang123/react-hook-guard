@@ -1,6 +1,6 @@
 {
   "name": "react-hook-guard",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Combine react-router-dom with configs, guard functions, inspire of angular router architecture",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
