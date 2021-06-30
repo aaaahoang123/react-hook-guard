@@ -1,7 +1,7 @@
 import {RouterOutlet, WithRouteProps} from 'react-auth-router';
 import { Link } from 'react-router-dom';
 
-function Layout2({route}: WithRouteProps) {
+function Layout2({...props}: any) {
     return (
         <>
             This is Layout 2
@@ -13,7 +13,7 @@ function Layout2({route}: WithRouteProps) {
                     Component 3
                 </Link>
             </div>
-            <RouterOutlet routes={route.children}/>
+            <RouterOutlet {...props} />
         </>
     );
 }

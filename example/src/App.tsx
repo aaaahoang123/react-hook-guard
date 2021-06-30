@@ -5,7 +5,7 @@ import routes from './routes';
 function App() {
   return (
     <div className="App">
-        <RouterOutlet routes={routes} />
+        <RouterOutlet routes={routes} relativeMode={true} />
     </div>
   );
 }

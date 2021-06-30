@@ -8,40 +8,40 @@ import useAuthorization from './guards/useAuthorization';
 
 const routes: Routes = [
     {
-        path: '/v1',
+        path: 'v1',
         component: Layout1,
         canActivate: [useGuestGuard],
         children: [
             {
-                path: '/v1/component1',
+                path: 'component1',
                 component: lazy(() => import('./components/Component1')),
             },
             {
-                path: '/v1',
-                redirectTo: '/v1/component1'
+                path: '',
+                redirectTo: 'component1'
             }
         ]
     },
     {
-        path: '/',
+        path: ':id',
         component: Layout2,
         canActivate: [useAuthentication],
         canActivateChild: [useAuthorization],
         children: [
             {
-                path: '/component2',
+                path: 'component2',
                 component: lazy(() => import('./components/Component2')),
                 data: {
                    role: 2
                 }
             },
             {
-                path: '/component3',
+                path: 'component3',
                 component: lazy(() => import('./components/Component3')),
             },
             {
-                path: '/',
-                redirectTo: '/component3',
+                path: '',
+                redirectTo: 'component3',
             }
         ]
     },
