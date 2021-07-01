@@ -1,7 +1,9 @@
 import {RouterOutlet} from 'react-hook-guard';
 import { Link } from 'react-router-dom';
+import {useAuth} from '../guards/AuthProvider';
 
 function WithNavbarLayout({...props}: any) {
+    const {logout} = useAuth();
     return (
         <>
             This is with navbar layout. The layout for logged in user with full features.
@@ -12,6 +14,9 @@ function WithNavbarLayout({...props}: any) {
                 <Link to={'/vovi/component3'}>
                     Component 3
                 </Link>
+            </div>
+            <div>
+                <button onClick={logout}>Logout</button>
             </div>
             <div>
                 <RouterOutlet {...props} />

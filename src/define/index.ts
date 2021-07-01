@@ -74,6 +74,19 @@ export interface WithParentRouteProps {
 }
 
 export interface AuthRouterConfigOptions {
+    /**
+     * Config the suspense component when lazy load component
+     */
     SuspenseFallback?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
+    /**
+     * Config the view will display when user can not access the route
+     */
     CantActivateFallback?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
+}
+
+export interface RouterGuardExtraRoutes {
+    /**
+     * Config the route will match all the un-config routes in each RouterOutlet.
+     */
+    matchAllRoute?: Route;
 }

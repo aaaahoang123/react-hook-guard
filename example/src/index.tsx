@@ -5,6 +5,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
 import {AuthProvider} from './guards/AuthProvider';
+import reactHookGuard from 'react-hook-guard';
+import Spin from './components/Spin';
+import AccessDenied from './components/AccessDenied';
+import NotFound from './components/NotFound';
+
+reactHookGuard.config({
+    SuspenseFallback: Spin,
+    CantActivateFallback: AccessDenied,
+    matchAllRoute: {
+        path: '',
+        component: NotFound,
+    }
+})
 
 ReactDOM.render(
   <React.StrictMode>
