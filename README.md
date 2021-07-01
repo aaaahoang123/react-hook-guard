@@ -128,7 +128,8 @@ const appRoutes: Routes = [
                 component: lazy(() => import('./features/auth/login')),
                 data: {title: 'Login'}
             },
-            {path: '', redirectTo: 'login'} // redirect relative with the parent path, you can use `absoluteRedirectTo` property instead for absolute path
+            // redirect relative with the parent path, you can use `absoluteRedirectTo` property instead for absolute path
+            {path: '', redirectTo: 'login', exact: true}
         ]
     },
     {
@@ -145,7 +146,7 @@ const appRoutes: Routes = [
                 data: {role: 'admin'}
             },
             {path: 'info', component: lazy(() => import('./features/info'))},
-            {path: '', redirectTo: 'dashboard'}
+            {path: '', redirectTo: 'dashboard', exact: true}
         ]
     },
 ];
@@ -190,6 +191,19 @@ function CantActivateFallback() {
     );
 }
 
+function NotFound() {
+    return (
+        <div>
+            404 Not found
+        </div>  
+    );
+}
+
+const matchAllRoute = {
+    path: '',
+    component: NotFound,
+}
+
 // index.tsx
 import reactHookGuard from 'react-hook-guard';
 
@@ -197,7 +211,14 @@ reactHookGuard.config({
     // Suspense component will be use to Suspense the lazyload components
     SuspenseFallback,
     // Can't Activate component will be use when the route can not be access
-    CantActivateFallback
+    CantActivateFallback,
+    // This config allow you config a global page when not found any matches routes
+    // Under the hood, react-hook-guard will auto create an extra relative route like the configured to each RouterOutlet
+    // So if you want to use specific matchAllRoute for specific RouterOutlet
+    // just provide the last route with the same `path` and `exact` with the global that you configured,
+    // react-hook-guard will auto ignore the global if `the last route in a `chilren` array`
+    // is the same pathMatch with the global
+    matchAllRoute,
 });
 
 // More codes here

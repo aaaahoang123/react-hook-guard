@@ -4,8 +4,6 @@ import {Redirect, useRouteMatch, generatePath} from 'react-router-dom';
 import {memo, Suspense, useMemo} from 'react';
 import RouterOutlet from './RouterOutlet';
 
-const {CantActivateFallback, SuspenseFallback} = fallbackComponents;
-
 export interface ProtectedContentProps extends WithRouteProps {
     relativeMode?: boolean;
 }
@@ -32,7 +30,7 @@ const ProtectedContent = memo(({route, relativeMode,...props}: ProtectedContentP
 
         if (!active) {
             // @ts-ignore
-            return (<CantActivateFallback />);
+            return (<fallbackComponents.CantActivateFallback />);
         }
     }
 
@@ -44,7 +42,7 @@ const ProtectedContent = memo(({route, relativeMode,...props}: ProtectedContentP
 
     if (route.component) {
         result.push(// @ts-ignore
-            <Suspense fallback={<SuspenseFallback />} key={0}>
+            <Suspense fallback={<fallbackComponents.SuspenseFallback />} key={0}>
                 <route.component {...props }
                     // @ts-ignore
                                  parentRoute={route}
