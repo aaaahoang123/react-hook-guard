@@ -10,17 +10,18 @@ import Component4 from './components/Component4';
 
 const routes: Routes = [
     {
-        path: 'v1',
+        path: 'auth',
         component: WithoutNavbarLayout,
         canActivate: [useGuestGuard],
         children: [
             {
-                path: 'component1',
-                component: lazy(() => import('./components/Component1')),
+                path: 'login',
+                component: lazy(() => import('./components/Login')),
             },
             {
                 path: '',
-                redirectTo: 'component1'
+                exact: true,
+                redirectTo: 'login'
             }
         ]
     },
@@ -34,7 +35,8 @@ const routes: Routes = [
             },
             {
                 path: '',
-                redirectTo: 'component4'
+                redirectTo: 'component4',
+                exact: true
             }
         ]
     },
@@ -57,13 +59,15 @@ const routes: Routes = [
             },
             {
                 path: '',
+                exact: true,
                 redirectTo: 'component3',
             }
         ]
     },
     {
         path: '',
-        redirectTo: 'v1'
+        exact: true,
+        redirectTo: 'default-app-id'
     }
 ];
 
