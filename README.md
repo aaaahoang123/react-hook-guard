@@ -223,3 +223,36 @@ reactHookGuard.config({
 
 // More codes here
 ```
+## Relative Link support
+
+By default, react-router-dom 5 doesn't support relative `<Link />` component, this package will support the relative link with current route match.
+
+```tsx
+import {RelativeLink} from "react-hook-guard";
+
+const HaveRelativeLinkComponent = () => {
+    // E.g: The path is /app/:foo/:bar
+    // And the url is /app/my-company/departments
+    // The RelativeLink will allow us to navigate to /app/my-company/departments/create
+    return (
+        <RelativeLink to={'create'} />
+    )
+}
+```
+
+We also provide another hook for navigating relatively
+
+```tsx
+import {useNavigate} from "react-hook-guard";
+import {useEffect} from "react";
+
+const HaveNavigateComponent = () => {
+    // E.g: The path is /app/:foo/:bar
+    // And the url is /app/my-company/departments
+    // The navigate will allow us to navigate to /app/my-company/departments/create
+    const navigate = useNavigate();
+    useEffect(() => {
+        navigate('create');
+    }, [navigate]);
+}
+```
