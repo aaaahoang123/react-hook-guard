@@ -22,7 +22,18 @@ const resolveRoute = (route: RouteWithCommand, parentRoute?: RouteWithCommand, r
     }
 
     if (parentRoute) {
-        resolvedRoute.canActivate = ([] as any[]).concat(parentRoute.canActivateChild ?? [], route.canActivate ?? []);
+        resolvedRoute.canActivate = [...parentRoute.canActivateChild ?? [], ...route.canActivate ?? []];
+
+        const activateChild = [...parentRoute.canActivateChild ?? [], ...route.canActivateChild ?? []];
+        const duplicatedActivateChild = new Set();
+        const canActivateChild = [];
+        for (const activate of activateChild) {
+            if (!duplicatedActivateChild.has(activate)) {
+                canActivateChild.push(activate);
+                duplicatedActivateChild.add(activate);
+            }
+        }
+        resolvedRoute.canActivateChild = canActivateChild;
     }
 
     return resolvedRoute;
