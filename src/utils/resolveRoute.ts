@@ -1,7 +1,32 @@
-import {RouteWithCommand} from '../define';
+import {NavigateOptions, RouteWithCommand} from '../define';
+import routeMap from "./routeMap";
+
+function resolveAbsoluteRedirectTo(redirectTo: string | NavigateOptions, relative?: boolean, parentCommands?: string[]) {
+    // Redirect options use name will be the first case
+    if (typeof redirectTo !== 'string' && redirectTo.name) {
+        return undefined;
+    }
+    let redirectPath = typeof redirectTo === 'string'
+        ? redirectTo
+        : redirectTo?.path ? redirectTo.path : undefined;
+    if (relative) {
+        if (typeof redirectPath === 'string') {
+            const redirectToCommands = [
+                ...parentCommands ?? [],
+                redirectPath,
+            ].filter(command => !!command);
+            return  '/' + redirectToCommands.join('/');
+        }
+        return undefined;
+    }
+
+    return redirectPath;
+}
 
 const resolveRoute = (route: RouteWithCommand, parentRoute?: RouteWithCommand, relativeMode: boolean = false): RouteWithCommand => {
-    const resolvedRoute = {...route};
+    if (route.resolved) return route;
+
+    const resolvedRoute = {...route, resolved: true};
     if (relativeMode) {
         const commands = [
             ...parentRoute?.commands ?? [],
@@ -9,16 +34,12 @@ const resolveRoute = (route: RouteWithCommand, parentRoute?: RouteWithCommand, r
         ].filter(command => !!command);
         resolvedRoute.commands = commands;
         resolvedRoute.absolutePath = '/' + commands.join('/');
-        if (typeof route.redirectTo === 'string') {
-            const redirectToCommands = [
-                ...parentRoute?.commands ?? [],
-                route.redirectTo,
-            ].filter(command => !!command);
-            resolvedRoute.absoluteRedirectTo = '/' + redirectToCommands.join('/');
-        }
     } else {
         resolvedRoute.absolutePath = route.path;
-        resolvedRoute.absoluteRedirectTo = resolvedRoute.redirectTo;
+    }
+
+    if (resolvedRoute.redirectTo) {
+        resolvedRoute.absoluteRedirectTo = resolveAbsoluteRedirectTo(resolvedRoute.redirectTo, relativeMode, parentRoute?.commands);
     }
 
     if (parentRoute) {
@@ -34,6 +55,12 @@ const resolveRoute = (route: RouteWithCommand, parentRoute?: RouteWithCommand, r
             }
         }
         resolvedRoute.canActivateChild = canActivateChild;
+    }
+
+    resolvedRoute.children = resolvedRoute.children?.map(child => resolveRoute(child, resolvedRoute, relativeMode));
+
+    if (resolvedRoute.name) {
+        routeMap.set(resolvedRoute.name, resolvedRoute);
     }
 
     return resolvedRoute;

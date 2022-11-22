@@ -9,6 +9,12 @@ import {RouteComponentProps} from 'react-router';
  */
 export declare type GuardFn = (route: Route) => boolean;
 
+export interface NavigateOptions {
+    path?: string;
+    name?: string;
+    keepQuery?: boolean;
+}
+
 export interface Route<D = any> {
     /**
      * Path of the route
@@ -20,8 +26,9 @@ export interface Route<D = any> {
     component?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
     /**
      * Link to redirect if match route
+     * Or config using object
      */
-    redirectTo?: string;
+    redirectTo?: string | NavigateOptions;
     /**
      * Redirect to the absolute path if match route
      */
@@ -51,6 +58,11 @@ export interface Route<D = any> {
      * Match exact the route when render
      */
     exact?: boolean;
+
+    /**
+     * Place a name for the route
+     */
+    name?: string;
 }
 
 export declare type Routes<D = any> = Route<D>[];
@@ -58,6 +70,7 @@ export declare type Routes<D = any> = Route<D>[];
 export declare type RouteWithCommand<D = any> = Route<D> & {
     commands?: string[];
     absolutePath?: string;
+    resolved?: boolean;
 };
 
 export interface WithRouteProps {
