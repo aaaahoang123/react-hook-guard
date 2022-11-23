@@ -125,6 +125,8 @@ const appRoutes: Routes = [
         children: [
             {
                 path: 'login',
+                // The name will be used to redirecting or navigating without any care of url or path
+                name: 'login',
                 component: lazy(() => import('./features/auth/login')),
                 data: {title: 'Login'}
             },
@@ -142,11 +144,25 @@ const appRoutes: Routes = [
         children: [
             {
                 path: 'dashboard',
+                name: 'dashboard',
                 component: lazy(() => import('./features/dashboard')),
                 data: {role: 'admin'}
             },
-            {path: 'info', component: lazy(() => import('./features/info'))},
-            {path: '', redirectTo: 'dashboard', exact: true}
+            {path: 'info', name: 'userInfo', component: lazy(() => import('./features/info'))},
+            {path: 'redirect', redirectTo: 'dashboard', exact: true},
+            // Or another way to use redirect
+            {
+                path: 'redirect-by-config',
+                redirectTo: {
+                    // Redirect to the route have exactly the matching name
+                    name: 'userInfo',
+                    // If you keep name config empty, just use path, it's the same with config redirectTo with a simple string
+                    path: 'dashboard',
+                    // e.g: current url is: /a/b?c=d and redirect to userInfo with keepQuery = true, the route will be: /info?c=d. 
+                    // The config default have value = false
+                    keepQuery: true,
+                }
+            }
         ]
     },
 ];
@@ -253,6 +269,12 @@ const HaveNavigateComponent = () => {
     const navigate = useNavigate();
     useEffect(() => {
         navigate('create');
+
+        // You can also navigate by config like redirect config at routes
+        navigate({
+            name: 'dashboard',
+            keepQuery: true,
+        });
     }, [navigate]);
 }
 ```
