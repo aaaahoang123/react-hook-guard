@@ -1,17 +1,19 @@
-import {useHistory, useRouteMatch, generatePath} from "react-router-dom";
+import {generatePath, useMatches, useNavigate} from "react-router-dom";
 import {useCallback} from "react";
 import {NavigateOptions} from "../define";
 import routeMap from "../utils/routeMap";
 
-function useNavigate() {
-    const history = useHistory();
-    const {path, params} = useRouteMatch();
+function useHookGuardNavigate() {
+    const navigateFunction = useNavigate();
+    const matches = useMatches();
+    const last = matches[matches.length - 1];
+    const {pathname: path, params} = last;
 
     return useCallback((navigateTo: string | NavigateOptions) => {
         if (typeof navigateTo !== "string" && navigateTo.name) {
             const route = routeMap.get(navigateTo.name);
             if (route) {
-                history.push(route.absolutePath!);
+                navigateFunction(route.absolutePath!);
                 return;
             } else {
                 throw new Error('Route name: ' + navigateTo.name + ' not found! Please checking the route configs!')
@@ -28,8 +30,8 @@ function useNavigate() {
         if (typeof navigateTo !== 'string' && navigateTo?.keepQuery) {
             navigate += location.search;
         }
-        history.push(navigate);
-    }, [history, path, params]);
+        navigateFunction(navigate);
+    }, [navigateFunction, path, params]);
 }
 
-export default useNavigate;
+export default useHookGuardNavigate;

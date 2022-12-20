@@ -1,5 +1,5 @@
 import {memo, useMemo} from 'react';
-import {Route as RouteComponent, Switch} from 'react-router-dom';
+import {Outlet, Route as RouteComponent, Routes} from 'react-router-dom';
 import {Route, RouteWithCommand, WithRoutesProps} from '../define';
 import ProtectedContent from './ProtectedContent';
 import {resolveRoute} from '../utils';
@@ -9,6 +9,22 @@ export interface RouterOutletProps extends WithRoutesProps {
     parentRoute?: Route;
     relativeMode?: boolean;
 }
+
+const renderRoutes = (routes?: RouteWithCommand[]) => {
+    if (!routes?.length) {
+        return undefined;
+    }
+    return routes?.map(route => (
+        <RouteComponent path={route.relativePath}
+                        key={route.absolutePath}
+                        element={<ProtectedContent
+                            route={route}
+                        />}
+        >
+            {renderRoutes(route.children)}
+        </RouteComponent>
+    ))
+};
 
 const RouterOutlet = memo(({routes, parentRoute, relativeMode}: RouterOutletProps) => {
     const resolvedRoutes = useMemo(() => {
@@ -24,24 +40,14 @@ const RouterOutlet = memo(({routes, parentRoute, relativeMode}: RouterOutletProp
         return result;
     }, [routes]);
 
+    if (parentRoute) {
+        return <Outlet />;
+    }
+
     return (
-        <Switch>
-            {
-                resolvedRoutes?.map((route: RouteWithCommand) => (
-                    <RouteComponent
-                        path={route.absolutePath}
-                        exact={route.exact}
-                        key={route.absolutePath}
-                        render={props =>
-                            <ProtectedContent
-                                route={route}
-                                relativeMode={relativeMode}
-                                {...props} />
-                        }
-                    />
-                ))
-            }
-        </Switch>
+        <Routes>
+            {renderRoutes(resolvedRoutes)}
+        </Routes>
     );
 });
 

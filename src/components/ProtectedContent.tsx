@@ -1,6 +1,6 @@
 import {WithRouteProps} from '../define';
 import {fallbackComponents} from '../config';
-import {Redirect, useRouteMatch, generatePath, useLocation} from 'react-router-dom';
+import {generatePath, useLocation, Navigate, useParams} from 'react-router-dom';
 import {memo, Suspense, useMemo} from 'react';
 import RouterOutlet from './RouterOutlet';
 import routeMap from "../utils/routeMap";
@@ -15,10 +15,10 @@ interface MatchRouteRedirectProps {
 }
 
 const MatchRouteRedirect = memo(({to, keepQuery}: MatchRouteRedirectProps) => {
-    const match = useRouteMatch();
-    const redirectToRoute = useMemo(() => generatePath<string>(to, match.params), [match, to]);
+    const params = useParams();
+    const redirectToRoute = useMemo(() => generatePath<string>(to, params), [params, to]);
     const search = useLocation().search;
-    return <Redirect to={{
+    return <Navigate to={{
         pathname: redirectToRoute,
         search: keepQuery ? search : undefined,
     }} />;

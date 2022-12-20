@@ -34,6 +34,9 @@ const resolveRoute = (route: RouteWithCommand, parentRoute?: RouteWithCommand, r
         ].filter(command => !!command);
         resolvedRoute.commands = commands;
         resolvedRoute.absolutePath = '/' + commands.join('/');
+        if (resolvedRoute.children?.length && !resolvedRoute.path.endsWith('/*')) {
+            resolvedRoute.relativePath = `${route.path}/*`;
+        }
     } else {
         resolvedRoute.absolutePath = route.path;
     }

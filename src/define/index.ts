@@ -1,5 +1,4 @@
 import {ComponentType} from 'react';
-import {RouteComponentProps} from 'react-router';
 
 /**
  * The guard Fn that return boolean, declare to display the route or not.
@@ -23,7 +22,7 @@ export interface Route<D = any> {
     /**
      * Component to render the route
      */
-    component?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
+    component?: ComponentType<any>;
     /**
      * Link to redirect if match route
      * Or config using object
@@ -71,6 +70,7 @@ export declare type RouteWithCommand<D = any> = Route<D> & {
     commands?: string[];
     absolutePath?: string;
     resolved?: boolean;
+    relativePath?: string;
 };
 
 export interface WithRouteProps {
@@ -90,11 +90,11 @@ export interface AuthRouterConfigOptions {
     /**
      * Config the suspense component when lazy load component
      */
-    SuspenseFallback?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
+    SuspenseFallback?: ComponentType<any>;
     /**
      * Config the view will display when user can not access the route
      */
-    CantActivateFallback?: ComponentType<RouteComponentProps<any>> | ComponentType<any>;
+    CantActivateFallback?: ComponentType<any>;
 }
 
 export interface RouterGuardExtraRoutes {
